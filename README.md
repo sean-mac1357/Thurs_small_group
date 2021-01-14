@@ -1,0 +1,1 @@
+# This repo contains the small group project from thursday
