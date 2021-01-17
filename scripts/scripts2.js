@@ -1,42 +1,52 @@
 'use strict';
 
-function getPerson(person) {
-    const url = `https://swapi.dev/api/?people=${person}`;
+function getBio(data) {
+    const url = `https://swapi.dev/api/people/?search=${data}`
     get(url).then(function (response) {
-        updateBody(response.value);
+        createPersonBio(response.results);
+        console.log(response.results)
     })
 }
 
 function getPeople() {
-    const url = `https://swapi.dev/api/people/`
+    const url = `https://swapi.dev/api/people/`;
     get(url).then(function (response) {
-        console.log(response.results);
-        createPersonList(response.results)
+        // console.log(response.results);
+        createPersonList(response.results);
     })
-}
-
-function updateBody(person) {
-    const paragraph = document.querySelector('div #modal-body p');
-    paragraph.innerHtml = person;
 }
 
 function createPersonList(personList) {
-    const form = document.querySelector("#changePerson");
+    const form1 = document.querySelector("#changePerson");
     const personSelect = document.createElement("select");
-
-    personList.map(function(person) {
+    
+    personList.map(function (person) {
         const personOption = document.createElement("option")
         personOption.value = person.name;
-        console.log(personOption.value);
         personOption.innerHTML = person.name;
         personSelect.appendChild(personOption);
     });
-    form.appendChild(personSelect);
-
+    form1.appendChild(personSelect);
+    
     personSelect.addEventListener('change', function (event) {
-        getPerson(event.target.value);
+        getBio(event.target.value);
+        console.log(event.target.value);
+    });
+}
+
+function createPersonBio(personBio, personSelect) {
+    const form2 = document.querySelector("#updateBio p label");
+    const paragraph = document.createElement("span");
+
+    personBio.map(function (person) {
+        const personText = document.createElement("textarea");
+        personText.value = person.birth_year;
+        personText.innerHTML = person.birth_year;
+        paragraph.appendChild(personText)
     })
+    form2.appendChild(paragraph);
+
 }
 
 getPeople()
-getPerson('name')
+getBio("Luke Skywalker")
